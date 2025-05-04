@@ -1,115 +1,93 @@
 
-*{box-sizing:border-box;}
-
-body{
-  margin:0;
-  font-family:'Poppins',sans-serif;
-  background:#0d0d0d;
-  color:#fff;
+/* Fonts & Base */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(to bottom, #0d0d0d, #1a1a1a);
+  color: #fff;
 }
-
-/* Main card */
-.invite-container{
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  min-height:100vh;
-  padding:1rem;
+.invite-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 0 1rem;
+  box-sizing: border-box;
 }
-.card{
-  background:rgba(20,20,20,0.9);
-  border-radius:18px;
-  padding:2rem;
-  width:100%;
-  max-width:480px;
-  text-align:center;
-  box-shadow:0 0 20px rgba(255,0,0,0.4);
+.sunset-overlay {
+  background: rgba(30,30,30,0.9);
+  border-radius: 18px;
+  padding: 2rem 2.2rem;
+  width: 100%;
+  max-width: 480px;
+  text-align: center;
+  box-shadow: 0 0 18px rgba(255,0,0,0.4);
 }
-.title{
-  font-family:'Playfair Display',serif;
-  font-size:2.2rem;
-  text-transform:uppercase;
-  margin:0;
-  color:#fff;
-  text-shadow:0 0 8px #ff0000;
+.title {
+  font-family: 'Playfair Display', serif;
+  text-transform: uppercase;
+  font-size: 2.3rem;
+  line-height: 1.1;
+  margin: 0;
 }
-.subtitle{
-  display:block;
-  font-size:1rem;
-  margin-top:0.4rem;
-  color:#ffcc00;
-  letter-spacing:1px;
+.subtitle {
+  display: block;
+  font-family: 'Poppins', sans-serif;
+  font-size: 1rem;
+  color: #ffcc00;
+  margin-top: 0.3rem;
 }
-.details{
-  margin:1.5rem 0;
-  font-size:0.95rem;
-  line-height:1.6;
+.details {
+  margin: 1.2rem 0 1.8rem;
+  font-size: 0.95rem;
+  line-height: 1.5rem;
 }
-.countdown-box{
-  background:#161616;
-  border:2px solid #ff0000;
-  padding:0.8rem 1rem;
-  border-radius:10px;
-  display:inline-block;
-  font-family:'Space Mono',monospace;
-  font-size:1rem;
-  margin-bottom:1.2rem;
+.details strong { color:#ffcc00; }
+.countdown-box {
+  display: inline-block;
+  background: #111;
+  border: 2px solid #ff0033;
+  border-radius: 10px;
+  padding: 0.8rem 1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
 }
-
-/* Button */
-.rsvp-button,.submit-button{
-  background:#ff0033;
-  border:none;
-  color:#fff;
-  font-weight:600;
-  padding:1rem 1.4rem;
-  font-size:1rem;
-  border-radius:10px;
-  cursor:pointer;
-  width:100%;
+.rsvp-button {
+  background: #ff0033;
+  border: none;
+  color: #fff;
+  padding: 0.9rem 1.1rem;
+  font-size: 1rem;
+  border-radius: 10px;
+  cursor: pointer;
+  width: 100%;
 }
-.rsvp-button:hover,.submit-button:hover{background:#ff334d}
+.rsvp-button:hover { background:#ff1a44; }
 
 /* Modal */
-.hidden{display:none;}
-.show{display:flex;}
-
-.modal{
-  position:absolute;top:0;left:0;right:0;bottom:0;
-  background:rgba(0,0,0,0.7);
-  justify-content:center;
-  align-items:center;
-  padding:1rem;
-  z-index:1000;
-}
-.modal-box{
-  position:relative;
+.modal { position:fixed; top:0; left:0; right:0; bottom:0; display:none; justify-content:center; align-items:center; background:rgba(0,0,0,0.65); z-index:9999;}
+.show { display:flex; }
+.modal-box {
   background:#1e1e1e;
-  padding:2rem;
-  width:100%;
-  max-width:420px;
+  padding:2rem 1.5rem;
   border-radius:12px;
-  border:8px solid transparent;
-  border-image:repeating-linear-gradient(45deg,#666 0 8px, transparent 8px 16px) 8;
-}
-.close{
-  position:absolute;
-  top:8px;right:12px;
-  background:none;
-  border:none;
-  font-size:2rem;
+  width:90%;
+  max-width:400px;
+  position:relative;
   color:#fff;
-  cursor:pointer;
 }
+.close { position:absolute; top:10px; right:14px; border:none; background:none; color:#fff; font-size:2rem; cursor:pointer; }
+.modal-box label { display:block; margin:1rem 0 0.4rem; font-size:0.9rem; }
+.modal-box input, .modal-box select {
+  width:100%; padding:0.7rem; border-radius:6px; border:none; margin-bottom:0.6rem; font-family:'Poppins',sans-serif;
+}
+.tyre-border { border:4px dashed #555; }
 
-/* Form elements */
-.modal-box label{display:block;margin:1rem 0 0.3rem;}
-.modal-box input,
-.modal-box select{
-  width:100%;
-  padding:0.8rem;
-  font-size:1rem; /* >=16px to prevent iOS zoom */
-  border-radius:8px;
-  border:1px solid #ccc;
-  font-family:'Poppins',sans-serif;
+/* Mobile */
+@media(max-width:600px){
+  .sunset-overlay{padding:1.6rem 1.2rem;}
+  .title{font-size:1.9rem;}
+  .countdown-box{font-size:0.9rem;}
+  .modal-box{padding:1.5rem 1.2rem;}
 }
