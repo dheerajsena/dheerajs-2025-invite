@@ -26,8 +26,8 @@
   <div id="modal" class="modal hidden">
     <div class="modal-box tyre-border">
       <button id="closeModal" class="close" aria-label="Close">&times;</button>
-      <h2>Race Entry Form</h2>
-      <label for="guestName">Your Team Name</label>
+      <h2>RSVP Form</h2>
+      <label for="guestName">Your Name</label>
       <input type="text" id="guestName" required placeholder="Type your name"/>
       <label for="guestRsvp">Will you attend?</label>
       <select id="guestRsvp" required>
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   /* Engine rev sound */
   const rev = new Audio('https://cdn.pixabay.com/download/audio/2022/09/29/audio_8e268d3607.mp3?filename=f1-engine-rev-121506.mp3');
-  rev.volume = 0.2;
+  rev.volume = 0.25;
 
   /* Submit handler */
   submitBtn.addEventListener('click', async () => {
@@ -80,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
           ts: new Date().toISOString()
         })
       });
-      rev.play();
+      rev.play().catch(e=>console.log(e));
       alert('Grid slot confirmed! 🏎️');
       modal.classList.replace('show','hidden');
       nameInput.value = '';
@@ -90,7 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
       alert('Error, please try again.');
     } finally {
       submitBtn.disabled = false;
-      submitBtn.textContent = 'Launch 🚀';
+      submitBtn.textContent = 'Submit RSVP 🚀';
     }
   });
 
@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const h = Math.floor((diff%86400000)/3600000);
     const m = Math.floor((diff%3600000)/60000);
     const s = Math.floor((diff%60000)/1000);
-    countdown.innerHTML = `Party starts in <strong>${String(d).padStart(2,'0')}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s</strong>`;
+    countdown.innerHTML = `Race starts in <strong>${String(d).padStart(2,'0')}d&nbsp;${String(h).padStart(2,'0')}h&nbsp;${String(m).padStart(2,'0')}m&nbsp;${String(s).padStart(2,'0')}s</strong>`;
   }, 1000);
 });
 </script>
