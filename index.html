@@ -2,26 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lights Out & Birthday On</title>
-  <link rel="stylesheet" href="style.css"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Space+Mono&family=Manrope:wght@400;600&display=swap" rel="stylesheet"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lights Out &amp; Birthday On</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
   <div class="invite-container">
     <div class="sunset-overlay">
       <h1 class="title">Lights Out &amp; Birthday On<span class="subtitle">33 Laps Around the Sun</span></h1>
-
-      <div id="countdown" class="countdown">Race starts in&nbsp;--d&nbsp;--h&nbsp;--m&nbsp;--s</div>
-
       <div class="details">
-        <p><strong>Date:</strong> Sunday, May 11th</p>
-        <p><strong>Grid Time:</strong> 4:00&nbsp;PM – 10:00&nbsp;PM (Garage closes at 10)</p>
-        <p><strong>Pit Lane:</strong> Level 41, 60 Kavanagh Street, Southbank</p>
-        <p><strong>Dress&nbsp;Code:</strong> Not Monaco Formal — Just Fast, Fresh &amp; Fly 😎</p>
+        <p><strong>Date:</strong> Sunday, May&nbsp;11th</p>
+        <p><strong>Grid Time:</strong> 4:00&nbsp;PM&nbsp;–&nbsp;10:00&nbsp;PM (Garage closes at 10)</p>
+        <p><strong>Pit Lane:</strong> Level&nbsp;41,&nbsp;60&nbsp;Kavanagh&nbsp;Street, Southbank</p>
+        <p><strong>Dress&nbsp;Code:</strong> “If you ain't first, you're last.” Just look fast, fresh &amp; fly 😎</p>
       </div>
-
-      <button id="openModal" class="rsvp-button">Confirm Your Grid Slot 🏁</button>
+      <div id="countdown" class="countdown-box">Race starts in 00d 00h 00m 00s</div>
+      <button id="openModal" class="rsvp-button">Book&nbsp;Your&nbsp;Grid&nbsp;Slot&nbsp;🏁</button>
     </div>
   </div>
 
@@ -30,93 +27,88 @@
     <div class="modal-box tyre-border">
       <button id="closeModal" class="close" aria-label="Close">&times;</button>
       <h2>Race Entry Form</h2>
-
       <label for="guestName">Your Team Name</label>
-      <input type="text" id="guestName" required/>
-
+      <input type="text" id="guestName" required placeholder="Type your name"/>
       <label for="guestRsvp">Will you attend?</label>
       <select id="guestRsvp" required>
         <option value="" disabled selected>Choose…</option>
-        <option value="yes">Yes – See you there!</option>
-        <option value="maybe">Maybe</option>
-        <option value="no">No, stuck in the pits</option>
+        <option value="Yes">Yes – See you there!</option>
+        <option value="Maybe">Maybe</option>
+        <option value="No">No, can’t make it</option>
       </select>
-
-      <button id="submitRsvp" class="rsvp-button">Launch 🚀</button>
+      <button id="submitRsvp" class="rsvp-button">Launch&nbsp;🚀</button>
     </div>
   </div>
 
-  <!-- Engine rev sound -->
-  <audio id="sfx" preload="auto">
-    <source src="https://actions.google.com/sounds/v1/transportation/car_pass_by.ogg" type="audio/ogg">
-    <source src="https://actions.google.com/sounds/v1/transportation/car_pass_by.mp3" type="audio/mpeg">
-  </audio>
-
 <script>
-const modal      = document.getElementById('modal');
-const openBtn    = document.getElementById('openModal');
-const closeBtn   = document.getElementById('closeModal');
-const submitBtn  = document.getElementById('submitRsvp');
-const nameInput  = document.getElementById('guestName');
-const rsvpSelect = document.getElementById('guestRsvp');
-const sfx        = document.getElementById('sfx');
+document.addEventListener('DOMContentLoaded', () => {
+  const modal      = document.getElementById('modal');
+  const openBtn    = document.getElementById('openModal');
+  const closeBtn   = document.getElementById('closeModal');
+  const submitBtn  = document.getElementById('submitRsvp');
+  const nameInput  = document.getElementById('guestName');
+  const rsvpSelect = document.getElementById('guestRsvp');
+  const countdown  = document.getElementById('countdown');
 
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNFGXHPzr5li9NjJE-PRcc_vlja5hN9RBs4EHReOdXtLhLgV0ro4Y4qCR7YBZOTcBlDw/exec';
+  /* Show / hide modal */
+  openBtn.addEventListener('click', () => modal.classList.replace('hidden','show'));
+  closeBtn.addEventListener('click', () => modal.classList.replace('show','hidden'));
 
-/* Countdown */
-const raceDate   = new Date('2025-05-11T16:00:00');
-function updateCountdown() {
-  const now = new Date();
-  const diff = raceDate - now;
-  if (diff <= 0) {
-    document.getElementById('countdown').textContent = "Lights Out! The race (party) is on!";
-    clearInterval(countdownTimer);
-    return;
-  }
-  const d = Math.floor(diff / (1000*60*60*24));
-  const h = Math.floor((diff/(1000*60*60)) % 24);
-  const m = Math.floor((diff/(1000*60)) % 60);
-  const s = Math.floor((diff/1000) % 60);
-  document.getElementById('countdown').innerHTML =
-    `Race starts in&nbsp;${d}d&nbsp;${h}h&nbsp;${m}m&nbsp;${s}s`;
-}
-const countdownTimer = setInterval(updateCountdown, 1000);
-updateCountdown();
+  /* Engine rev sound */
+  const rev = new Audio('https://cdn.pixabay.com/download/audio/2022/09/29/audio_8e268d3607.mp3?filename=f1-engine-rev-121506.mp3');
+  rev.volume = 0.2;
 
-/* Modal logic */
-openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
-closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+  /* Submit handler */
+  submitBtn.addEventListener('click', async () => {
+    const name = nameInput.value.trim();
+    const rsvp = rsvpSelect.value;
+    if (!name || !rsvp) {
+      alert('Please enter your name and select RSVP');
+      return;
+    }
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+    try {
+      await fetch('https://script.google.com/macros/s/AKfycbwNFGXHPzr5li9NjJE-PRcc_vlja5hN9RBs4EHReOdXtLhLgV0ro4Y4qCR7YBZOTcBlDw/exec', {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          rsvp,
+          ua: navigator.userAgent,
+          ts: new Date().toISOString()
+        })
+      });
+      rev.play();
+      alert('Grid slot confirmed! 🏎️');
+      modal.classList.replace('show','hidden');
+      nameInput.value = '';
+      rsvpSelect.value = '';
+    } catch(err) {
+      console.error(err);
+      alert('Error, please try again.');
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Launch 🚀';
+    }
+  });
 
-submitBtn.addEventListener('click', async () => {
-  const name = nameInput.value.trim();
-  const rsvp = rsvpSelect.value;
-  if (!name || !rsvp) {
-    alert('Please complete the form.');
-    return;
-  }
-  submitBtn.disabled = true;
-  submitBtn.textContent = 'Sending…';
-
-  try {
-    await fetch(SCRIPT_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({ name, rsvp, ua:navigator.userAgent, ts: new Date().toISOString() })
-    });
-    sfx.volume = 0.4;
-    sfx.play();
-    alert('Grid slot confirmed – see you on the track! 🏎️');
-    modal.classList.add('hidden');
-    nameInput.value = '';
-    rsvpSelect.value = '';
-  } catch (err) {
-    console.error(err);
-    alert('Something went wrong, please try again');
-  } finally {
-    submitBtn.disabled = false;
-    submitBtn.textContent = 'Launch 🚀';
-  }
+  /* Countdown timer */
+  const raceTime = new Date('2025-05-11T16:00:00+10:00').getTime();
+  setInterval(() => {
+    const now = Date.now();
+    const diff = raceTime - now;
+    if (diff <= 0) {
+      countdown.textContent = 'Lights out! 🏁';
+      return;
+    }
+    const d = Math.floor(diff/86400000);
+    const h = Math.floor((diff%86400000)/3600000);
+    const m = Math.floor((diff%3600000)/60000);
+    const s = Math.floor((diff%60000)/1000);
+    countdown.innerHTML = `Race starts in <strong>${String(d).padStart(2,'0')}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m ${String(s).padStart(2,'0')}s</strong>`;
+  }, 1000);
 });
 </script>
 </body>
