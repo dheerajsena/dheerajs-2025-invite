@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lights Out & Birthday On</title>
+  <link rel="stylesheet" href="style.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Space+Mono&family=Manrope:wght@400;600&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <div class="invite-container">
+    <div class="sunset-overlay">
+      <h1 class="title">Lights Out &amp; Birthday On<span class="subtitle">33 Laps Around the Sun</span></h1>
+
+      <div id="countdown" class="countdown">Race starts in&nbsp;--d&nbsp;--h&nbsp;--m&nbsp;--s</div>
+
+      <div class="details">
+        <p><strong>Date:</strong> Sunday, May 11th</p>
+        <p><strong>Grid Time:</strong> 4:00&nbsp;PM – 10:00&nbsp;PM (Garage closes at 10)</p>
+        <p><strong>Pit Lane:</strong> Level 41, 60 Kavanagh Street, Southbank</p>
+        <p><strong>Dress&nbsp;Code:</strong> Not Monaco Formal — Just Fast, Fresh &amp; Fly 😎</p>
+      </div>
+
+      <button id="openModal" class="rsvp-button">Confirm Your Grid Slot 🏁</button>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div id="modal" class="modal hidden">
+    <div class="modal-box tyre-border">
+      <button id="closeModal" class="close" aria-label="Close">&times;</button>
+      <h2>Race Entry Form</h2>
+
+      <label for="guestName">Your Team Name</label>
+      <input type="text" id="guestName" required/>
+
+      <label for="guestRsvp">Will you attend?</label>
+      <select id="guestRsvp" required>
+        <option value="" disabled selected>Choose…</option>
+        <option value="yes">Yes – See you there!</option>
+        <option value="maybe">Maybe</option>
+        <option value="no">No, stuck in the pits</option>
+      </select>
+
+      <button id="submitRsvp" class="rsvp-button">Launch 🚀</button>
+    </div>
+  </div>
+
+  <!-- Engine rev sound -->
+  <audio id="sfx" preload="auto">
+    <source src="https://actions.google.com/sounds/v1/transportation/car_pass_by.ogg" type="audio/ogg">
+    <source src="https://actions.google.com/sounds/v1/transportation/car_pass_by.mp3" type="audio/mpeg">
+  </audio>
+
+<script>
+const modal      = document.getElementById('modal');
+const openBtn    = document.getElementById('openModal');
+const closeBtn   = document.getElementById('closeModal');
+const submitBtn  = document.getElementById('submitRsvp');
+const nameInput  = document.getElementById('guestName');
+const rsvpSelect = document.getElementById('guestRsvp');
+const sfx        = document.getElementById('sfx');
+
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwNFGXHPzr5li9NjJE-PRcc_vlja5hN9RBs4EHReOdXtLhLgV0ro4Y4qCR7YBZOTcBlDw/exec';
+
+/* Countdown */
+const raceDate   = new Date('2025-05-11T16:00:00');
+function updateCountdown() {
+  const now = new Date();
+  const diff = raceDate - now;
+  if (diff <= 0) {
+    document.getElementById('countdown').textContent = "Lights Out! The race (party) is on!";
+    clearInterval(countdownTimer);
+    return;
+  }
+  const d = Math.floor(diff / (1000*60*60*24));
+  const h = Math.floor((diff/(1000*60*60)) % 24);
+  const m = Math.floor((diff/(1000*60)) % 60);
+  const s = Math.floor((diff/1000) % 60);
+  document.getElementById('countdown').innerHTML =
+    `Race starts in&nbsp;${d}d&nbsp;${h}h&nbsp;${m}m&nbsp;${s}s`;
+}
+const countdownTimer = setInterval(updateCountdown, 1000);
+updateCountdown();
+
+/* Modal logic */
+openBtn.addEventListener('click', () => modal.classList.remove('hidden'));
+closeBtn.addEventListener('click', () => modal.classList.add('hidden'));
+
+submitBtn.addEventListener('click', async () => {
+  const name = nameInput.value.trim();
+  const rsvp = rsvpSelect.value;
+  if (!name || !rsvp) {
+    alert('Please complete the form.');
+    return;
+  }
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'Sending…';
+
+  try {
+    await fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ name, rsvp, ua:navigator.userAgent, ts: new Date().toISOString() })
+    });
+    sfx.volume = 0.4;
+    sfx.play();
+    alert('Grid slot confirmed – see you on the track! 🏎️');
+    modal.classList.add('hidden');
+    nameInput.value = '';
+    rsvpSelect.value = '';
+  } catch (err) {
+    console.error(err);
+    alert('Something went wrong, please try again');
+  } finally {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'Launch 🚀';
+  }
+});
+</script>
+</body>
+</html>
