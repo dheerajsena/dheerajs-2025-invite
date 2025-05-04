@@ -14,3 +14,14 @@ body{margin:0;font-family:'Poppins',sans-serif;background:#0B1B34;color:#fff;}
 .modal-box input,.modal-box select{width:100%;padding:0.8rem;font-size:1rem;border:1px solid #ccc;border-radius:8px;margin-top:0.4rem;background:#0B1B34;color:#fff;}
 .submit-btn{width:100%;margin-top:1.4rem;padding:1rem;background:#3A6FF1;border:none;color:#fff;font-weight:700;border-radius:10px;}
 @media(max-width:600px){.cta-btn,.countdown-btn{font-size:0.95rem;padding:1rem}}
+
+/* === Mobile refinements === */
+@media(max-width:600px){
+  .hero-title{font-size:1.8rem;line-height:1.15;}
+  .hero-sub{font-size:0.95rem;}
+  .invite-card{padding:2rem 1.2rem;}
+  .details{font-size:0.9rem;}
+  .countdown-btn,.cta-btn{font-size:0.9rem;padding:1rem 0.8rem;width:90%;margin-inline:auto;}
+  .modal-box{padding:1.6rem 1.2rem;}
+  .submit-btn{padding:0.9rem;}
+}
